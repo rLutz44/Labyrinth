@@ -15,30 +15,13 @@ def labyrinthBuilder(labyrinthNumberOfLevels, labyrinthNumberOfRows, labyrinthNu
         labyrinthLevel = labyrinthLevelDesigner(labyrinthNumberOfRows, labyrinthNumberOfColumns)
         labyrinthLevelList.append(labyrinthLevel)
     
-    
-    labyrinthStart = "S"
-    labyrinthExit = "E"    
-    
-    labyrinthLevelFirst = 0
-    labyrinthRowFirstIdx = 0
-    labyrinthColumnFirstIdx = 0
-    
-    labyrinthLevelLast = len(labyrinthLevelList)-1
-    labyrinthRowLastIdx = labyrinthNumberOfRows-1
-    labyrinthColumnLastIdx = labyrinthNumberOfColumns-1
-    
-    labyrinthLevelList[labyrinthLevelFirst][labyrinthRowFirstIdx][labyrinthColumnFirstIdx] = labyrinthStart
-    labyrinthLevelList[labyrinthLevelLast][labyrinthRowLastIdx][labyrinthColumnLastIdx] = labyrinthExit
+    labyrinthLevelList = labyrinthSetStartAndExit(labyrinthLevelList, labyrinthNumberOfRows, labyrinthNumberOfColumns)
     
     print("\n")
     print(labyrinthLevelList[0])
     print("\n")
     print(labyrinthLevelList[1])
-    # firstLevel = np.chararray((labyrinthNumberOfRows, labyrinthNumberOfColumns), unicode = True)
-    # firstLevel[:] = '.'
-    # firstLevel[0][0] = labyrinthStart
-    # firstLevel[labyrinthNumberOfRows-1][labyrinthNumberOfColumns-1] = labyrinthExit
-    # print(firstLevel)
+
 
 
 def labyrinthLevelDesigner(labyrinthNumberOfRows, labyrinthNumberOfColumns):
@@ -56,7 +39,24 @@ def labyrinthLevelDesigner(labyrinthNumberOfRows, labyrinthNumberOfColumns):
             
     return labyrinthLevel
 
+
+def labyrinthSetStartAndExit(labyrinthLevelList, labyrinthNumberOfRows, labyrinthNumberOfColumns):
     
+    labyrinthStart = "S"
+    labyrinthExit = "E"    
+    
+    labyrinthLevelFirst = 0
+    labyrinthRowFirstIdx = 0
+    labyrinthColumnFirstIdx = 0
+    
+    labyrinthLevelLast = len(labyrinthLevelList)-1
+    labyrinthRowLastIdx = labyrinthNumberOfRows-1
+    labyrinthColumnLastIdx = labyrinthNumberOfColumns-1
+
+    labyrinthLevelList[labyrinthLevelFirst][labyrinthRowFirstIdx][labyrinthColumnFirstIdx] = labyrinthStart
+    labyrinthLevelList[labyrinthLevelLast][labyrinthRowLastIdx][labyrinthColumnLastIdx] = labyrinthExit
+
+    return labyrinthLevelList
 
 #def canIGetOut():
 
