@@ -11,14 +11,11 @@ def labyrinthBuilder(labyrinthNumberOfLevels, labyrinthNumberOfRows, labyrinthNu
         return "The sum of labyrinth rows and columns should not be less than 3, pls try again"
  
     labyrinthStart = "S"
-    labyrinthExit = "E"
-    labyrinthWall = "#"
-    labyrinthAir = "."
-    
+    labyrinthExit = "E"    
     
     labyrinthLevelList = []
-    while(labyrinthLevelList.length < labyrinthNumberOfLevels):
-        labyrinthLevel = labyrinthLevelDesigner()
+    while(len(labyrinthLevelList) < labyrinthNumberOfLevels):
+        labyrinthLevel = labyrinthLevelDesigner(labyrinthNumberOfRows, labyrinthNumberOfColumns)
         labyrinthLevelList.append(labyrinthLevel)
     # firstLevel = np.chararray((labyrinthNumberOfRows, labyrinthNumberOfColumns), unicode = True)
     # firstLevel[:] = '.'
@@ -26,14 +23,25 @@ def labyrinthBuilder(labyrinthNumberOfLevels, labyrinthNumberOfRows, labyrinthNu
     # firstLevel[labyrinthNumberOfRows-1][labyrinthNumberOfColumns-1] = labyrinthExit
     # print(firstLevel)
 
-def labyrinthLevelDesigner():
+
+def labyrinthLevelDesigner(labyrinthNumberOfRows, labyrinthNumberOfColumns):
     
+    labyrinthWall = "#"
+    labyrinthAir = "."
+    labyrinthLevel = np.chararray((labyrinthNumberOfRows, labyrinthNumberOfColumns), unicode = True)    
+
+    labyrinthComponentList = [labyrinthWall, labyrinthAir]
+    
+    for labyrinthRow in range(labyrinthNumberOfRows):
+        for labyrinthColumn in range (labyrinthNumberOfColumns):
+            labyrinthComponent = random.choice(labyrinthComponentList)
+            labyrinthLevel[labyrinthRow][labyrinthColumn] = labyrinthComponent 
+            
+    return labyrinthLevel
+
     
 
-#def inputValidation(userInput):
-    
-
-
+#def canIGetOut():
 
 
 #------------------- Main ---------------------#
