@@ -15,9 +15,20 @@ def labyrinthBuilder(labyrinthNumberOfLevels, labyrinthNumberOfRows, labyrinthNu
     labyrinthWall = "#"
     labyrinthAir = "."
     
-    firstLevel = np.chararray((labyrinthNumberOfRows, labyrinthNumberOfColumns))
-    firstLevel[:] = '#'
-    print(firstLevel)
+    
+    labyrinthLevelList = []
+    while(labyrinthLevelList.length < labyrinthNumberOfLevels):
+        labyrinthLevel = labyrinthLevelDesigner()
+        labyrinthLevelList.append(labyrinthLevel)
+    # firstLevel = np.chararray((labyrinthNumberOfRows, labyrinthNumberOfColumns), unicode = True)
+    # firstLevel[:] = '.'
+    # firstLevel[0][0] = labyrinthStart
+    # firstLevel[labyrinthNumberOfRows-1][labyrinthNumberOfColumns-1] = labyrinthExit
+    # print(firstLevel)
+
+def labyrinthLevelDesigner():
+    
+    
 
 #def inputValidation(userInput):
     
