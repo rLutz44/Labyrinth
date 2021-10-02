@@ -10,13 +10,30 @@ def labyrinthBuilder(labyrinthNumberOfLevels, labyrinthNumberOfRows, labyrinthNu
     if(labyrinthNumberOfRows + labyrinthNumberOfColumns < 3):
         return "The sum of labyrinth rows and columns should not be less than 3, pls try again"
  
-    labyrinthStart = "S"
-    labyrinthExit = "E"    
-    
     labyrinthLevelList = []
     while(len(labyrinthLevelList) < labyrinthNumberOfLevels):
         labyrinthLevel = labyrinthLevelDesigner(labyrinthNumberOfRows, labyrinthNumberOfColumns)
         labyrinthLevelList.append(labyrinthLevel)
+    
+    
+    labyrinthStart = "S"
+    labyrinthExit = "E"    
+    
+    labyrinthLevelFirst = 0
+    labyrinthRowFirstIdx = 0
+    labyrinthColumnFirstIdx = 0
+    
+    labyrinthLevelLast = len(labyrinthLevelList)-1
+    labyrinthRowLastIdx = labyrinthNumberOfRows-1
+    labyrinthColumnLastIdx = labyrinthNumberOfColumns-1
+    
+    labyrinthLevelList[labyrinthLevelFirst][labyrinthRowFirstIdx][labyrinthColumnFirstIdx] = labyrinthStart
+    labyrinthLevelList[labyrinthLevelLast][labyrinthRowLastIdx][labyrinthColumnLastIdx] = labyrinthExit
+    
+    print("\n")
+    print(labyrinthLevelList[0])
+    print("\n")
+    print(labyrinthLevelList[1])
     # firstLevel = np.chararray((labyrinthNumberOfRows, labyrinthNumberOfColumns), unicode = True)
     # firstLevel[:] = '.'
     # firstLevel[0][0] = labyrinthStart
