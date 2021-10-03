@@ -28,12 +28,11 @@ def labyrinth_builder(
     
     labyrinth_level_list = labyrinth_set_start_and_exit(labyrinth_level_list, labyrinth_number_of_rows, labyrinth_number_of_columns)
     
-    print("\n")
-    print(labyrinth_level_list[0])
-    print("\n")
-    print(labyrinth_level_list[1])
+    labyrinth_level_list_output(labyrinth_number_of_levels,
+                                labyrinth_level_list)
 
     return labyrinth_level_list
+
 
 def labyrinth_level_designer(labyrinth_number_of_rows: int, labyrinth_number_of_columns: int) -> str:
     """
@@ -75,3 +74,12 @@ def labyrinth_set_start_and_exit(labyrinth_level_list: str, labyrinth_number_of_
     return labyrinth_level_list
 
 
+def labyrinth_level_list_output(labyrinth_number_of_levels: int, labyrinth_level_list: list):
+    """
+    | Print the labyrinth on the console 
+    
+    """
+    
+    for labyrinth_level in range(labyrinth_number_of_levels):
+        print("\n")
+        print(labyrinth_level_list[labyrinth_level])
