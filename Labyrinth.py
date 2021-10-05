@@ -1,6 +1,6 @@
 import numpy as np
 
-#import random
+from queue import PriorityQueue
 
 from labyrinth_builder import labyrinth_builder
 
@@ -35,7 +35,7 @@ class Node:
         return self.compound == "X"
     
     def is_air(self):
-        return  self.compound == "."
+        return  (self.compound == "." or self.compound == "E")
     
     def update_neighbors(self, labyrinth_node_grid): #level implementation missing
         """
@@ -93,24 +93,15 @@ def canIGetOutOfLabyrinth(
     distance_node_to_exit: int = calculate_distance_node_to_exit(labyrinth_node_grid[LABYRINTH_START_LEVEL][LABYRINTH_START_ROW][LABYRINTH_START_COLUMN],
                                                                  labyrinth_node_grid[labyrinth_exit_level][labyrinth_exit_row][labyrinth_exit_column])
     
-    labyrinth_node_grid = update_neighbor_of_every_node(labyrinth_node_grid,
+    labyrinth_node_grid = update_neighbor_for_every_node(labyrinth_node_grid,
                                                         labyrinth_number_of_levels, 
                                                         labyrinth_number_of_rows, 
                                                         labyrinth_number_of_columns)
-   # test1 = labyrinth_node_grid[0][0][0].neighbors
-    #test2 = labyrinth_node_grid[0][0][1].neighbors
-    # LABYRINTH_START: int = 0
-    # h_distance_from_node_to_exit = ((labyrinth_number_of_levels-1) 
-    #                                                    + (labyrinth_number_of_rows-1) 
-    #                                                    + (labyrinth_number_of_columns-1) 
-    #                                                    + LABYRINTH_START)
+   
+    calculate_shortest_path_to_exit(labyrinth_node_grid,
+                                    labyrinth_node_grid[LABYRINTH_START_LEVEL][LABYRINTH_START_ROW][LABYRINTH_START_COLUMN],
+                                    labyrinth_node_grid[labyrinth_exit_level][labyrinth_exit_row][labyrinth_exit_column])
     
-    # #g_distance_start_to_node
-    # f_priority_score: int = (h_distance_from_node_to_exit 
-    #                     + g_distance_start_to_node) #the lower the score the higher the priority
-    #bei start node ist f score = 0
-    
-
     
     
 
@@ -139,7 +130,6 @@ def create_labyrinth_node_grid(labyrinth_level_list : list,
 
 
 
-
 def calculate_distance_node_to_exit(labyrinth_node: Node, 
                                     labyrinth_exit: Node) -> int:
     """
@@ -159,7 +149,7 @@ def calculate_distance_node_to_exit(labyrinth_node: Node,
 
 
 
-def update_neighbor_of_every_node(labyrinth_node_grid: list,
+def update_neighbor_for_every_node(labyrinth_node_grid: list,
                                   labyrinth_number_of_levels: int, 
                                   labyrinth_number_of_rows: int, 
                                   labyrinth_number_of_columns: int) -> np:
@@ -167,8 +157,7 @@ def update_neighbor_of_every_node(labyrinth_node_grid: list,
     | updates the neighbor attribute for every node in the node_grid
 
     """
-    #test=labyrinth_node_grid[0][0][0].compound
-    #labyrinth_node_grid[0][0][0].update_neighbors(labyrinth_node_grid)
+
     for level in range (labyrinth_number_of_levels):
         for row in range(labyrinth_number_of_rows):
             for column in range(labyrinth_number_of_columns):
@@ -177,6 +166,57 @@ def update_neighbor_of_every_node(labyrinth_node_grid: list,
     return labyrinth_node_grid
 
 
+
+def calculate_shortest_path_to_exit(labyrinth_node_grid: list,
+                                    start_node: Node,
+                                    exit_node: Node) -> str:
+    """
+    | Use the A*star algorithm to calculate the shortest path from start to exit
+
+    """
+    count = 0 #tiebreaker if multiple priority scores have the same value it should take the score with the lowest count
+    path_length: int = 0
+    open_set = PriorityQueue()  #from queue library
+    open_set.put((0, count, start_node)) #f_score, count, node. contains every node that hasn't been cheked if it's neighbors are closer to exit
+    came_from = {} # previous nodes from open_set
+    distance_start_to_node = {node: float("inf") for level in labyrinth_node_grid for row in level for node in row} #g_score
+    distance_start_to_node[start_node] = 0 #g_score for start
+    priority_score = {node: float('inf') for level in labyrinth_node_grid for row in level for node in row} #f_score
+    priority_score[start_node] = calculate_distance_node_to_exit(start_node, exit_node) #f_score = h_score for start
+
+    open_set_hash = {start_node} #same as open_set but we can look into it, cotains nodes we havent visited yet
+    
+    while not open_set.empty(): #runs until open_set is empty --> there is no path from start to exit
+        current_node = open_set.get()[2] #node with highest priority becomes current_node
+        open_set_hash.remove(current_node) #delete node from set that we are currently exploring
+
+        if current_node == exit_node: #if shortest route has been found
+            while current_node in came_from:
+                current_node = came_from[current_node]
+                path_length += 1
+        
+            print("Ausbruch in",str(path_length),"Minuten")
+            return True
+
+        for neighbor in current_node.neighbors:
+            temp_distance_start_to_node: int = distance_start_to_node[current_node] + 1 #steps are 1 Unit. make 1 step from current note
+            
+            if temp_distance_start_to_node < distance_start_to_node[neighbor]: #checks if current_node is closer to start than it's current neighbor
+                came_from[neighbor] = current_node #Neighbor comes from current_node. this information will be put in a dictionary
+                distance_start_to_node[neighbor] = temp_distance_start_to_node #noting distance from start to neighbor in dict
+                priority_score[neighbor] = temp_distance_start_to_node + calculate_distance_node_to_exit(neighbor, exit_node) #the lower the priority_score the higher the priority
+                
+                if neighbor not in open_set_hash:
+                    count += 1 #is also considered in priority
+                    open_set.put((priority_score[neighbor], count, neighbor)) #save neighbor in set
+                    open_set_hash.add(neighbor) #into hash too
+                    #neighbor.make_open()
+
+      #if current_node != start_node:
+         #current_node.make_closed()
+
+    return print("Gefangen :(")
+        
 
 #------------------- Main ---------------------#
 
