@@ -105,7 +105,9 @@ def create_labyrinth_node_grid(labyrinth_level_list : list,
     | Creating list that contains in each element a instance from node to depict the labyrinth
     
     """
-    labyrinth_node_grid = ([ [ [ [] for column in range(labyrinth_number_of_columns)] for row in range(labyrinth_number_of_rows)] for level in range(labyrinth_number_of_levels)])
+    labyrinth_node_grid = ([ [ [ [] for column in range(labyrinth_number_of_columns)] 
+                                    for row in range(labyrinth_number_of_rows)] 
+                                    for level in range(labyrinth_number_of_levels)]) #creates 3D-Node-Grid
     
     for level in range (labyrinth_number_of_levels):
         for row in range(labyrinth_number_of_rows):
@@ -168,23 +170,24 @@ def shortest_path_to_exit(labyrinth_node_grid: list,
                           exit_node: Node) -> str:
     """
     |Use the A*(star) algorithm to calculate the shortest path 
-     from start to exit
+     from start to exit and print the length of the escaperoute
 
     """
-    tie_breaker_count = 0                               #tiebreaker if multiple priority scores have the same value it should take the score with the lowest tie_breaker_count_count
+    tie_breaker_count = 0                               #takes the node with lowest tie_breaker_count if 2 or more nodes have same priority
     path_length: int = 0
     
     open_set = PriorityQueue()                          #from queue library
-    open_set.put((0, tie_breaker_count, start_node))    #f_score, tie_breaker_count, node. contains every node that hasn't been cheked if it's neighbors are closer to exit
-    pre_node_from_open_set = {}                         #previous nodes from open_set
+    open_set.put((0, tie_breaker_count, start_node))    #(f_score, contains every node that hasn't been cheked if it's neighbors are closer to exit
+    open_set_hash = {start_node}                        #same as open_set but we can look into it. Contains Nodes we haven't visited yet
+    pre_node_from_open_set = {}                         #contains the previous nodes from nodes in open_set
     
-    distance_start_to_node = {node: float("inf") for level in labyrinth_node_grid for row in level for node in row} #g_score
-    distance_start_to_node[start_node] = 0              #g_score for start
+    distance_start_to_node = {node: float("inf") for level in labyrinth_node_grid for row in level for node in row}     #g_score
+    distance_start_to_node[start_node] = 0                                                                              #g_score for start
     
-    priority_score = {node: float('inf') for level in labyrinth_node_grid for row in level for node in row} #f_score
-    priority_score[start_node] = calculate_distance_node_to_exit(start_node, exit_node) #f_score = h_score for start
+    priority_score = {node: float('inf') for level in labyrinth_node_grid for row in level for node in row}             #f_score
+    priority_score[start_node] = calculate_distance_node_to_exit(start_node, exit_node)                                 #f_score = h_score for start
 
-    open_set_hash = {start_node}                        #same as open_set but we can look into it, cotains nodes we haven't visited yet
+
     
     while not open_set.empty():                         #runs until open_set is empty --> there is no path from start to exit
         current_node = open_set.get()[2]                #node with highest priority becomes current_node
@@ -202,7 +205,7 @@ def shortest_path_to_exit(labyrinth_node_grid: list,
             temp_distance_start_to_node: int = distance_start_to_node[current_node] + 1             #steps are 1 Unit. make 1 step from current note
             
             if temp_distance_start_to_node < distance_start_to_node[neighbor]:                      #checks if current_node is closer to start than it's current neighbor
-                pre_node_from_open_set[neighbor] = current_node                                     #Neighbor comes from current_node. this information will be put in a dictionary
+                pre_node_from_open_set[neighbor] = current_node                                     #Neighbor comes from current_node
                 distance_start_to_node[neighbor] = temp_distance_start_to_node                      #noting distance from start to neighbor in dict
                 priority_score[neighbor] = (temp_distance_start_to_node 
                                             + calculate_distance_node_to_exit(neighbor, exit_node)) #the lower the priority_score the higher the priority
