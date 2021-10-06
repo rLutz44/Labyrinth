@@ -1,5 +1,5 @@
 # Labyrinth solver
-Program where you can decide the number of levels, the length and, the width of the labyrinth.
+Program where you can decide the number of levels, the length and the width of the labyrinth.
 
 Walls will be randomly generated. After that the A*-algorithm is used to calculate the shortest 
 
