@@ -4,22 +4,13 @@ import random
 
 
 
-def labyrinth_builder(
-        labyrinth_number_of_levels: int, 
-        labyrinth_number_of_rows: int, 
-        labyrinth_number_of_columns: int) -> list:
+def labyrinth_builder(labyrinth_number_of_levels: int, 
+                      labyrinth_number_of_rows: int, 
+                      labyrinth_number_of_columns: int) -> str or list:
     """
     | Assemble all Levels into a single labyrinth and prints the whole labyrinth
     
     """
-    if(labyrinth_number_of_levels == 0 and labyrinth_number_of_rows == 0 and labyrinth_number_of_columns == 0):   
-        return "0 0 0"
-    
-    if(labyrinth_number_of_levels == 0 or labyrinth_number_of_rows == 0 or labyrinth_number_of_columns == 0):
-        return "Only use 0 for all 3 inputs or none of them, pls try again\n"
-    
-    if(labyrinth_number_of_rows + labyrinth_number_of_columns < 3):
-        return "The sum of labyrinth rows and columns should not be less than 3, pls try again"
  
     labyrinth_level_list: list = []
     while(len(labyrinth_level_list) < labyrinth_number_of_levels):
